@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .table-container {
+    width: 100%;
+    padding: 20px;
+    background-color: #f3f3f3;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  caption {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  tr:hover {background-color: #f5f5f5;}
+
+  @media screen and (max-width: 600px) {
+    .table-container {
+      padding: 5px;
+    }
+    th, td {
+      padding: 4px;
+      font-size: 14px;
+    }
+  }
+
+  .form-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  input[type='text'],
+  input[type='date'],
+  input[type='number'] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #4cae4c;
+  }
+
+  #search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  #search-container input, #search-container button {
+    margin: 0 10px;
+  }
+  input[type='text'], input[type='number'] {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  input[type='text']:focus, input[type='number']:focus {
+    border-color: #aaa;
+    outline: none;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+</style>
+</head>
+<body>
+
+  <div id="search-container">
+    <input type="text" id="customerSearch" placeholder="Заказчик">
+    <input type="text" id="categorySearch" placeholder="Категория">
+    <input type="number" id="minPriceSearch" placeholder="Мин. цена">
+    <input type="number" id="maxPriceSearch" placeholder="Макс. цена">
+    <button onclick="filterSearch()">Поиск</button>
+  </div>
+
+<div class="table-container">
+  <table id="myTable">
+    <caption>Таблица Продаж</caption>
+    <thead>
+      <tr>
+        <th>Заказчик</th>
+        <th>Товар</th>
+        <th>Категория</th>
+        <th>Дата</th>
+        <th>Менеджер Продаж</th>
+        <th>Регион</th>
+        <th>Закупка</th>
+        <th>Продажа</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Данные таблицы будут добавлены здесь -->
+    </tbody>
+  </table>
+</div>
+
+<button onclick="addRows()">Добавить строки</button>
+<button onclick="addAllRows()">Вернуть все строки</button>
+
+
+<!-- <div style="margin-top: 40px;">
+    <input type="text" id="customerInput" placeholder="Заказчик">
+    <input type="text" id="productInput" placeholder="Товар">
+    <input type="text" id="categoryInput" placeholder="Категория">
+    <input type="date" id="dateInput" placeholder="Дата">
+    <input type="text" id="salesManagerInput" placeholder="Менеджер Продаж">
+    <input type="text" id="regionInput" placeholder="Регион">
+    <input type="text" id="purchaseInput" placeholder="Закупка">
+    <input type="text" id="saleInput" placeholder="Продажа">
+     Поля для остальных столбцов 
+    <button onclick="addData()">Добавить данные</button>
+  </div> -->
+
+  <div class="form-container">
+    <div class="form-group">
+      <label for="customerInput">Заказчик:</label>
+      <input type="text" id="customerInput" placeholder="Введите имя заказчика">
+    </div>
+    <div class="form-group">
+      <label for="productInput">Товар:</label>
+      <input type="text" id="productInput" placeholder="Введите название товара">
+    </div>
+    <div class="form-group">
+      <label for="categoryInput">Категория:</label>
+      <input type="text" id="categoryInput" placeholder="Категория">
+    </div>
+    <div class="form-group">
+      <label for="dateInput">Дата:</label>
+      <input type="date" id="dateInput" placeholder="Дата">
+    </div>
+    <div class="form-group">
+      <label for="salesManagerInput">Менеджер Продаж:</label>
+      <input type="text" id="salesManagerInput" placeholder="Менеджер Продаж">
+    </div>
+    <div class="form-group">
+      <label for="regionInput">Регион:</label>
+      <input type="text" id="regionInput" placeholder="Регион">
+    </div>
+    <div class="form-group">
+      <label for="purchaseInput">Закупка:</label>
+      <input type="text" id="purchaseInput" placeholder="Закупка">
+    </div>
+    <div class="form-group">
+      <label for="saleInput">Продажа:</label>
+      <input type="text" id="saleInput" placeholder="Продажа">
+    </div>
+    <!-- Поля для остальных данных -->
+    <button onclick="addData()">Добавить данные</button>
+  </div>
+
+<script>
+
+// var salesData = [
+//     { customer: "ООО 'Созвездие'", product: "Ноутбук", category: "Электроника", date: "2023-05-12", salesManager: "Андреев А.А.", region: "Москва", purchase: 32000, sale: 64000 },
+//     { customer: "ИП 'Алмаз'", product: "Смартфон", category: "Электроника", date: "2023-09-28", salesManager: "Сидоров С.П.", region: "Санкт-Петербург", purchase: 22000, sale: 44000 },
+//     { customer: "ООО 'Золотой ключ'", product: "Мышь", category: "Электроника", date: "2023-02-15", salesManager: "Иванов И.И.", region: "Москва", purchase: 8000, sale: 16000 },
+//     { customer: "ООО 'Лунный свет'", product: "Планшет", category: "Электроника", date: "2023-11-05", salesManager: "Кузнецов К.К.", region: "Екатеринбург", purchase: 18000, sale: 36000 },
+//     { customer: "ООО 'Зеленый лес'", product: "Клавиатура", category: "Электроника", date: "2023-08-20", salesManager: "Петров П.П.", region: "Казань", purchase: 10000, sale: 20000 },
+//     { customer: "ЗАО 'Черная роза'", product: "Ноутбук", category: "Электроника", date: "2023-04-17", salesManager: "Смирнов С.С.", region: "Новосибирск", purchase: 35000, sale: 70000 },
+//     { customer: "ООО 'Радуга'", product: "Планшет", category: "Электроника", date: "2023-10-09", salesManager: "Алексеев А.А.", region: "Санкт-Петербург", purchase: 19000, sale: 38000 },
+//     { customer: "ИП 'Звездочка'", product: "Смартфон", category: "Электроника", date: "2023-07-24", salesManager: "Павлов П.П.", region: "Москва", purchase: 24000, sale: 48000 },
+//     { customer: "ООО 'Солнечный луч'", product: "Металл", category: "Стройка", date: "2023-01-30", salesManager: "Соколов С.С.", region: "Казань", purchase: 9000, sale: 18000 },
+//     { customer: "ООО 'Северный ветер'", product: "Клавиатура", category: "Электроника", date: "2023-06-18", salesManager: "Козлов К.К.", region: "Новосибирск", purchase: 11000, sale: 22000 },
+//     { customer: "ИП 'Синий океан'", product: "Ноутбук", category: "Электроника", date: "2023-12-08", salesManager: "Лебедев Л.Л.", region: "Екатеринбург", purchase: 30000, sale: 60000 },
+//     { customer: "ООО 'Белая рыбка'", product: "Планшет", category: "Электроника", date: "2023-03-11", salesManager: "Калинин К.К.", region: "Санкт-Петербург", purchase: 17000, sale: 34000 },
+//     { customer: "ООО 'Звездный путь'", product: "Смартфон", category: "Электроника", date: "2023-09-04", salesManager: "Сергеев С.С.", region: "Москва", purchase: 26000, sale: 52000 },
+//     { customer: "ИП 'Радужный мост'", product: "Дерево", category: "Стройка", date: "2023-02-22", salesManager: "Федоров Ф.Ф.", region: "Казань", purchase: 9500, sale: 19000 },
+// ];
+
+var salesData = [];
+
+  function addRows()  {
+  
+
+  // Генерация случайного имени клиента
+  const generateRandomCustomerName = () => {
+    var prefixes = ["ООО", "ЗАО", "ИП"];
+    var names = ["Ромашка", "Пион", "Гвоздика", "Лилия", "Роза", "Тюльпан"];
+    var prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    var name = names[Math.floor(Math.random() * names.length)];
+    return `${prefix} '${name}'`;
+  }
+  
+  // Генерация случайного продукта и категории
+  const generateRandomProductAndCategory = () => {
+    var products = ["Планшет", "Ноутбук", "Смартфон", "Клавиатура", "Мышь"];
+    var categories = ["Мебель", "Одежда", "Электроника", "Бытовая техника"];
+    var product = products[Math.floor(Math.random() * products.length)];
+    var category = categories[Math.floor(Math.random() * categories.length)];
+    return { product: product, category: category };
+  }
+  
+  // Генерация случайной даты
+  function generateRandomDate() {
+    var startDate = new Date(2023, 0, 1); // 1 января 2023
+    var endDate = new Date(2023, 12, 31); // 31 декабря 2023
+    var randomDate = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+    return randomDate.toISOString().slice(0, 10); // Формат YYYY-MM-DD
+  }
+  
+  // Генерация случайного имени менеджера продаж
+  function generateRandomSalesManagerName() {
+    var firstNames = ["Иван", "Петр", "Александр", "Сергей", "Михаил"];
+    var lastNames = ["Иванов", "Петров", "Сидоров", "Кузнецов", "Смирнов"];
+    var firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    var lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    return `${firstName} ${lastName.charAt(0)}.`;
+  }
+  
+  // Генерация случайной суммы покупки и продажи
+  function generateRandomPurchaseAndSale() {
+    var minPurchase = 10000;
+    var maxPurchase = 50000;
+    var purchase = Math.floor(minPurchase + Math.random() * (maxPurchase - minPurchase + 1));
+  
+    // Продажная цена в два раза выше покупной
+    var sale = purchase * 2;
+  
+    return { purchase: purchase, sale: sale };
+  }
+  
+  // Генерация случайной региона
+  function generateRandomRegion() {
+    var regions = ["Москва", "Санкт-Петербург", "Екатеринбург", "Казань", "Новосибирск"];
+    return regions[Math.floor(Math.random() * regions.length)];
+  }
+  
+  // Генерация 30 случайных объектов данных
+  for (var i = 0; i < 13; i++) {
+    var customer = generateRandomCustomerName();
+    var productAndCategory = generateRandomProductAndCategory();
+    var date = generateRandomDate();
+    var salesManager = generateRandomSalesManagerName();
+    var purchaseAndSale = generateRandomPurchaseAndSale();
+    var region = generateRandomRegion();
+  
+    var data = {
+      customer: generateRandomCustomerName(),
+      product: productAndCategory.product,
+      category: productAndCategory.category,
+      date: date,
+      salesManager: salesManager,
+      region: region,
+      purchase: purchaseAndSale.purchase,
+      sale: purchaseAndSale.sale
+    };
+    console.log(data)
+    salesData.push(data);
+  }
+
+  var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+  salesData.forEach(item => {
+    var row = table.insertRow();
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+    var cell6 = row.insertCell(5);
+    var cell7 = row.insertCell(6);
+    var cell8 = row.insertCell(7);
+    cell1.innerHTML = item.customer;
+    cell2.innerHTML = item.product;
+    cell3.innerHTML = item.category;
+    cell4.innerHTML = item.date;
+    cell5.innerHTML = item.salesManager;
+    cell6.innerHTML = item.region;
+    cell7.innerHTML = item.purchase;
+    cell8.innerHTML = item.sale;
+  });
+}
+
+function addData() {
+  var table = document.getElementById("myTable").getElementsByTagName('tbody')[0];
+  var row = table.insertRow();
+
+  var customerCell = row.insertCell(0);
+  var productCell = row.insertCell(1);
+  var categoryCell = row.insertCell(2);
+  var dateCell = row.insertCell(3);
+  var salesManagerCell = row.insertCell(4);
+  var regionCell = row.insertCell(5);
+  var purchaseCell = row.insertCell(6);
+  var saleCell = row.insertCell(7);
+  // Ячейки для остальных столбцов
+
+  // Получаем данные из формы
+  var customer = document.getElementById("customerInput").value;
+  var product = document.getElementById("productInput").value;
+  var category = document.getElementById("categoryInput").value;
+  var date = document.getElementById("dateInput").value;
+  var salesManager = document.getElementById("salesManagerInput").value;
+  var region = document.getElementById("regionInput").value;
+  var purchase = document.getElementById("purchaseInput").value;
+  var sale = document.getElementById("saleInput").value;
+  // Значения для остальных столбцов
+
+  // Добавляем данные в ячейки
+  customerCell.innerHTML = customer;
+  productCell.innerHTML = product;
+  categoryCell.innerHTML = category;
+  dateCell.innerHTML = date;
+  salesManagerCell.innerHTML = salesManager;
+  regionCell.innerHTML = region;
+  purchaseCell.innerHTML = purchase;
+  saleCell.innerHTML = sale;
+  // Заполнение остальных ячеек
+
+  // Очищаем поля ввода
+//   document.getElementById("customerInput").value = "";
+//   document.getElementById("productInput").value = "";
+//   document.getElementById("categoryInput").value = "";
+//   document.getElementById("dateInput").value = "";
+//   document.getElementById("salesManagerInput").value = "";
+//   document.getElementById("regionInput").value = "";
+//   document.getElementById("purchaseInput").value = "";
+//   document.getElementById("saleInput").value = "";
+  // Очистка остальных полей ввода
+}
+
+
+function filterSearch() {
+  // var inputCategory = document.getElementById('categorySearch').value.toLowerCase();
+  // var inputPrice = document.getElementById('priceSearch').value;
+  // var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+
+  console.log(inputCategory);
+  // Очистка таблицы перед отображением результатов
+  //table.innerHTML = '';
+
+  // Фильтрация данных и добавление в таблицу
+  // for (var i = 0; i < salesData.length; i++) {
+  //   console.log(i)
+  //   console.log(salesData[i].category.toLowerCase().includes(inputCategory) &&
+  //       salesData[i].sale <= parseInt(inputPrice))
+  //   if (salesData[i].category.toLowerCase().includes(inputCategory) &&
+  //       salesData[i].sale <= parseInt(inputPrice)) {
+  //     var row = table.insertRow();
+  //     var cell1 = row.insertCell(0);
+  //     var cell2 = row.insertCell(1);
+  //     var cell3 = row.insertCell(2);
+  //     var cell4 = row.insertCell(3);
+  //     var cell5 = row.insertCell(4);
+  //     var cell6 = row.insertCell(5);
+  //     var cell7 = row.insertCell(6);
+  //     var cell8 = row.insertCell(7);
+  //     cell1.innerHTML = salesData[i].customer;
+  //     cell2.innerHTML = salesData[i].product;
+  //     cell3.innerHTML = salesData[i].category;
+  //     cell4.innerHTML = salesData[i].date;
+  //     cell5.innerHTML = salesData[i].salesManager;
+  //     cell6.innerHTML = salesData[i].region;
+  //     cell7.innerHTML = salesData[i].purchase;
+  //     cell8.innerHTML = salesData[i].sale;
+  //     console.log(salesData[i])
+  //   }
+  // }
+  var inputCustomer = document.getElementById('customerSearch').value.toLowerCase();
+  var inputCategory = document.getElementById('categorySearch').value.toLowerCase();
+  var minPrice = document.getElementById('minPriceSearch').value;
+  var maxPrice = document.getElementById('maxPriceSearch').value;
+  var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+  var rows = table.getElementsByTagName('tr');
+
+  for (var i = 0; i < rows.length; i++) {
+    var customerCell = rows[i].getElementsByTagName('td')[0];
+    var categoryCell = rows[i].getElementsByTagName('td')[2];
+    var priceCell = rows[i].getElementsByTagName('td')[7];
+    if (customerCell && categoryCell && priceCell) {
+      var customerText = customerCell.textContent || customerCell.innerText;
+      var categoryText = categoryCell.textContent || categoryCell.innerText;
+      var priceText = priceCell.textContent || priceCell.innerText;
+      var price = parseInt(priceText);
+      if (customerText.toLowerCase().indexOf(inputCustomer) > -1 &&
+          categoryText.toLowerCase().indexOf(inputCategory) > -1 &&
+          price >= parseInt(minPrice) && price <= parseInt(maxPrice)) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = "none";
+      }
+    }
+  }
+}
+
+function addAllRows(){
+  var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+  var rows = table.getElementsByTagName('tr'); 
+
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].style.display = "";
+  }
+}
+
+</script>
+
+</body>
+</html>

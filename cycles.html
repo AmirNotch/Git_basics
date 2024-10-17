@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="input">
+
+    <p id="output">Text</p>
+
+    <button onclick="showMessage()">Submit</button>
+    <a href="./index.html">Перейти на другую страницу</a>
+    <script>
+        const input = document.getElementById("input");
+        const output = document.getElementById("output");
+
+        input.addEventListener("change", 
+            function showMessage(){
+                const inputValue = input.value;
+                output.textContent = "Ввели ~ " + inputValue 
+        });      
+    </script>
+</body>
+</html>
